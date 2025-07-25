@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "title": "春游记忆",
+    "date": "2025-03-15",
+    "description": "2025年春天的美好回忆",
+    "category": "春游",
+    "image": "images/spring_trip.jpg"
+  },
+  {
+    "id": 2,
+    "title": "海边之旅",
+    "date": "2025-06-05",
+    "description": "第一次一起看海",
+    "category": "旅行",
+    "image": "images/beach.jpg"
+  },
+  {
+    "id": 3,
+    "title": "爬山之旅",
+    "date": "2025-06-05",
+    "description": "第一次一起爬山",
+    "category": "旅行",
+    "image": "images/climbing.jpg"
+  }
+]

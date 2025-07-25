@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多多恋爱日记 - 资源库版</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #fff5f5 0%, #faf3ff 100%);
+            background-attachment: fixed;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .diary-card:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease;
+        }
+        
+        .memory-item {
+            position: relative;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .memory-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .memory-item::before {
+            content: '';
+            position: absolute;
+            left: -9px;
+            top: 0;
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 154, 158, 0.5);
+        }
+        
+        .heart {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #ff6b6b;
+            transform: rotate(45deg);
+            animation: float 6s ease-in-out infinite;
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.7);
+        }
+        
+        .heart:before,
+        .heart:after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background-color: #ff6b6b;
+            border-radius: 50%;
+            position: absolute;
+        }
+        
+        .heart:before {
+            top: -5px;
+            left: 0;
+        }
+        
+        .heart:after {
+            top: 0;
+            left: -5px;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: rotate(45deg) translateY(0) rotate(-45deg);
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(45deg) translateY(-100vh) rotate(-45deg);
+                opacity: 0;
+            }
+        }
+        
+        .snowflake {
+            position: fixed;
+            top: -20px;
+            color: #fff;
+            font-size: 1rem;
+            text-shadow: 0 0 5px #fff;
+            z-index: 9999;
+            user-select: none;
+            pointer-events: none;
+            animation: snowfall linear infinite;
+        }
+        
+        @keyframes snowfall {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+            100% {
+                transform: translateY(100vh) translateX(20px);
+            }
+        }
+        
+        .romantic-title {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #a1c4fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 300% 300%;
+            animation: gradientShift 8s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .romantic-card {
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+        }
+        
+        .romantic-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .romantic-button {
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 0.5rem 1.5rem;
+            box-shadow: 0 4px 15px rgba(255, 154, 158, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .romantic-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 154, 158, 0.6);
+        }
+        
+        .stats-card {
+            border-radius: 15px;
+            background: linear-gradient(135deg, #fff0f0 0%, #f0f9ff 100%);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .photo-placeholder {
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #a1c4fd);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            min-height: 12rem;
+        }
+        
+        .photo-image {
+            width: 100%;
+            height: 12rem;
+            object-fit: cover;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .love-timer {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            background: linear-gradient(45deg, #ff9a9e, #a1c4fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 1rem 0;
+        }
+        
+        .message-board {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .message-item {
+            border-left: 3px solid #ff9a9e;
+            padding-left: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .future-plans {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .plan-item {
+            background: linear-gradient(45deg, #fff0f0, #f0f9ff);
+            border-radius: 10px;
+            padding: 1rem;
+            flex: 1 1 200px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .countdown-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #fff5f5 0%, #faf3ff 100%);
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .admin-panel {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+            display: none;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 8px;
+            border: 1px solid #ff9a9e;
+            background: rgba(255, 255, 255, 0.7);
+        }
+        
+        .tab-button {
+            background: rgba(255, 154, 158, 0.2);
+            border: none;
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .tab-button.active {
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .resource-info {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            background: rgba(255, 154, 158, 0.2);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .filter-btn.active {
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            color: white;
+        }
+        
+        .date-filter {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .date-filter input {
+            padding: 0.5rem;
+            border-radius: 8px;
+            border: 1px solid #ff9a9e;
+        }
+        
+        .date-filter button {
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-pink-50">
+    <!-- 飘雪容器 -->
+    <div id="snow-container"></div>
+    
+    <!-- 爱心容器 -->
+    <div id="heart-container"></div>
+    
+    <nav class="bg-white shadow-md fixed w-full top-0 z-50" style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px);">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" class="text-xl font-bold text-pink-600">💕 多多恋爱日记</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="#diary" class="text-gray-600 hover:text-pink-600 romantic-button">日记</a>
+                    <a href="#memories" class="text-gray-600 hover:text-pink-600 romantic-button">纪念日</a>
+                    <a href="#albums" class="text-gray-600 hover:text-pink-600 romantic-button">相册</a>
+                    <a href="#stats" class="text-gray-600 hover:text-pink-600 romantic-button">统计</a>
+                    <a href="#messages" class="text-gray-600 hover:text-pink-600 romantic-button">留言</a>
+                    <button id="admin-toggle" class="text-gray-600 hover:text-pink-600 romantic-button">
+                        <i class="fas fa-cog"></i> 管理
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto p-8 pt-20">
+        <h1 class="text-4xl font-bold text-center mb-6 romantic-title">💖 我们的甜蜜空间 💖</h1>
+        
+        <!-- 恋爱计时器 -->
+        <div class="text-center mb-12">
+            <div class="love-timer" id="love-timer">0天0小时0分钟0秒</div>
+            <p class="text-gray-600">我们已经在一起...</p>
+        </div>
+        
+        <!-- 管理面板 -->
+        <div id="admin-panel" class="admin-panel">
+            <h2 class="text-2xl font-semibold mb-4 text-pink-600 flex items-center">
+                <i class="fas fa-tools mr-2"></i>
+                <span>管理面板</span>
+            </h2>
+            
+            <!-- 标签页按钮 -->
+            <div class="mb-4">
+                <button class="tab-button active" data-tab="instructions">使用说明</button>
+                <button class="tab-button" data-tab="diary-management">日记管理</button>
+                <button class="tab-button" data-tab="memory-management">纪念日管理</button>
+                <button class="tab-button" data-tab="album-management">相册管理</button>
+                <button class="tab-button" data-tab="message-management">留言管理</button>
+            </div>
+            
+            <!-- 使用说明 -->
+            <div id="instructions" class="tab-content active">
+                <h3 class="text-xl font-semibold mb-3 text-pink-600">使用说明</h3>
+                <div class="resource-info">
+                    <h4 class="font-semibold text-pink-600 mb-2">资源库模式说明</h4>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>本页面通过读取 <code>data</code> 目录下的数据文件来显示内容</li>
+                        <li>每种类型的内容都存储在一个JSON文件中，而不是分散的多个文件</li>
+                        <li>日记数据存储在 <code>data/diaries.json</code> 文件中</li>
+                        <li>纪念日数据存储在 <code>data/memories.json</code> 文件中</li>
+                        <li>相册数据存储在 <code>data/albums.json</code> 文件中</li>
+                        <li>留言数据存储在 <code>data/messages.json</code> 文件中</li>
+                        <li>相册图片存储在 <code>images/</code> 目录下</li>
+                        <li>要添加新内容，只需要编辑对应的JSON文件并刷新页面</li>
+                    </ul>
+                    
+                    <h4 class="font-semibold text-pink-600 my-2">添加新内容的方法</h4>
+                    <p>编辑对应的JSON文件，在数组中添加新的对象，然后刷新页面即可看到更新。</p>
+                    
+                    <details class="mt-2">
+                        <summary class="cursor-pointer text-blue-600">日记文件格式示例</summary>
+                        <pre class="bg-gray-100 p-2 mt-1 text-xs overflow-x-auto">[
+  {
+    "id": 3,
+    "title": "日记标题",
+    "date": "2025-07-26",
+    "content": "日记内容...",
+    "tags": ["标签1", "标签2"]
+  }
+]</pre>
+                    </details>
+                    
+                    <details class="mt-2">
+                        <summary class="cursor-pointer text-blue-600">纪念日文件格式示例</summary>
+                        <pre class="bg-gray-100 p-2 mt-1 text-xs overflow-x-auto">[
+  {
+    "id": 3,
+    "title": "纪念日标题",
+    "date": "2025-07-26",
+    "description": "纪念日描述..."
+  }
+]</pre>
+                    </details>
+                    
+                    <details class="mt-2">
+                        <summary class="cursor-pointer text-blue-600">相册文件格式示例</summary>
+                        <pre class="bg-gray-100 p-2 mt-1 text-xs overflow-x-auto">[
+  {
+    "id": 3,
+    "title": "相册项标题",
+    "date": "2025-07-26",
+    "description": "相册项描述...",
+    "category": "分类",
+    "image": "images/图片文件名.jpg"
+  }
+]</pre>
+                    </details>
+                    
+                    <details class="mt-2">
+                        <summary class="cursor-pointer text-blue-600">留言文件格式示例</summary>
+                        <pre class="bg-gray-100 p-2 mt-1 text-xs overflow-x-auto">[
+  {
+    "id": 3,
+    "content": "留言内容...",
+    "author": "留言人",
+    "date": "2025-07-26"
+  }
+]</pre>
+                    </details>
+                    
+                    <div class="mt-4">
+                        <button id="refresh-data" class="romantic-button">刷新所有数据</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 日记管理 -->
+            <div id="diary-management" class="tab-content">
+                <h3 class="text-xl font-semibold mb-3 text-pink-600">日记管理</h3>
+                <div class="resource-info">
+                    <p>编辑 <code>data/diaries.json</code> 文件来管理日记内容。</p>
+                    <ol class="list-decimal pl-5 space-y-2 mt-2">
+                        <li>打开 <code>data/diaries.json</code> 文件</li>
+                        <li>在数组中添加新的日记对象或修改现有内容</li>
+                        <li>保存文件后点击下面的刷新按钮更新页面内容</li>
+                    </ol>
+                </div>
+                <button id="refresh-diaries" class="romantic-button mt-4">刷新日记</button>
+            </div>
+            
+            <!-- 纪念日管理 -->
+            <div id="memory-management" class="tab-content">
+                <h3 class="text-xl font-semibold mb-3 text-pink-600">纪念日管理</h3>
+                <div class="resource-info">
+                    <p>编辑 <code>data/memories.json</code> 文件来管理纪念日内容。</p>
+                    <ol class="list-decimal pl-5 space-y-2 mt-2">
+                        <li>打开 <code>data/memories.json</code> 文件</li>
+                        <li>在数组中添加新的纪念日对象或修改现有内容</li>
+                        <li>保存文件后点击下面的刷新按钮更新页面内容</li>
+                    </ol>
+                </div>
+                <button id="refresh-memories" class="romantic-button mt-4">刷新纪念日</button>
+            </div>
+            
+            <!-- 相册管理 -->
+            <div id="album-management" class="tab-content">
+                <h3 class="text-xl font-semibold mb-3 text-pink-600">相册管理</h3>
+                <div class="resource-info">
+                    <p>编辑 <code>data/albums.json</code> 文件来管理相册内容。</p>
+                    <ol class="list-decimal pl-5 space-y-2 mt-2">
+                        <li>打开 <code>data/albums.json</code> 文件</li>
+                        <li>在数组中添加新的相册对象或修改现有内容</li>
+                        <li>如果需要添加图片，请将图片文件放入 <code>images/</code> 目录</li>
+                        <li>在相册对象中设置 <code>image</code> 字段为图片路径</li>
+                        <li>保存文件后点击下面的刷新按钮更新页面内容</li>
+                    </ol>
+                </div>
+                <button id="refresh-albums" class="romantic-button mt-4">刷新相册</button>
+            </div>
+            
+            <!-- 留言管理 -->
+            <div id="message-management" class="tab-content">
+                <h3 class="text-xl font-semibold mb-3 text-pink-600">留言管理</h3>
+                <div class="resource-info">
+                    <p>编辑 <code>data/messages.json</code> 文件来管理留言内容。</p>
+                    <ol class="list-decimal pl-5 space-y-2 mt-2">
+                        <li>打开 <code>data/messages.json</code> 文件</li>
+                        <li>在数组中添加新的留言对象或修改现有内容</li>
+                        <li>保存文件后点击下面的刷新按钮更新页面内容</li>
+                    </ol>
+                </div>
+                <button id="refresh-messages" class="romantic-button mt-4">刷新留言</button>
+            </div>
+        </div>
+        
+        <!-- 日记部分 -->
+        <section id="diary" class="mb-12">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-semibold text-pink-600 flex items-center">
+                    <i class="fas fa-book-heart mr-2"></i>
+                    <span>💌 最新日记</span>
+                </h2>
+                <div class="flex gap-2">
+                    <button id="show-all-diaries" class="filter-btn active">全部</button>
+                    <button id="show-latest-diaries" class="filter-btn">最新</button>
+                </div>
+            </div>
+            
+            <div class="date-filter">
+                <label>查看指定日期:</label>
+                <input type="date" id="diary-date-filter">
+                <button id="apply-diary-date-filter">应用</button>
+                <button id="clear-diary-date-filter">清除</button>
+            </div>
+            
+            <div id="diary-container">
+                <!-- 日记内容将通过JavaScript动态加载 -->
+                <p class="text-gray-500 text-center py-4">加载中...</p>
+            </div>
+        </section>
+
+        <!-- 纪念日部分 -->
+        <section id="memories" class="mb-12">
+            <h2 class="text-2xl font-semibold mb-4 text-purple-600 flex items-center">
+                <i class="fas fa-calendar-days mr-2"></i>
+                <span>🎉 重要时刻</span>
+            </h2>
+            <div class="bg-white p-6 rounded-lg shadow-md romantic-card">
+                <div id="memories-container" class="space-y-6">
+                    <!-- 纪念日内容将通过JavaScript动态加载 -->
+                    <p class="text-gray-500 text-center py-4">加载中...</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 倒计时部分 -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold mb-4 text-blue-600 flex items-center">
+                <i class="fas fa-hourglass-half mr-2"></i>
+                <span>⏳ 特别日子倒计时</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="countdown-card">
+                    <h3 class="text-lg font-semibold text-blue-600">下一个纪念日</h3>
+                    <div class="text-2xl font-bold text-blue-500 mt-2" id="anniversary-countdown">计算中...</div>
+                    <p class="text-sm text-gray-600 mt-1" id="anniversary-date-display">未设置</p>
+                </div>
+                <div class="countdown-card">
+                    <h3 class="text-lg font-semibold text-blue-600">情人节</h3>
+                    <div class="text-2xl font-bold text-blue-500 mt-2" id="valentine-countdown">计算中...</div>
+                    <p class="text-sm text-gray-600 mt-1" id="valentine-date-display">未设置</p>
+                </div>
+                <div class="countdown-card">
+                    <h3 class="text-lg font-semibold text-blue-600">你的生日</h3>
+                    <div class="text-2xl font-bold text-blue-500 mt-2" id="birthday-countdown">计算中...</div>
+                    <p class="text-sm text-gray-600 mt-1" id="birthday-date-display">未设置</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 未来计划部分 -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold mb-4 text-green-600 flex items-center">
+                <i class="fas fa-dream-caught mr-2"></i>
+                <span>🌟 未来计划</span>
+            </h2>
+            <div class="romantic-card bg-white p-6 rounded-lg shadow-md">
+                <div class="future-plans">
+                    <div class="plan-item">
+                        <h3 class="font-semibold text-green-600 mb-2"><i class="fas fa-plane mr-2"></i>海外旅行</h3>
+                        <p class="text-gray-600 text-sm">计划一起去欧洲旅行，看看巴黎的埃菲尔铁塔和罗马的古迹</p>
+                    </div>
+                    <div class="plan-item">
+                        <h3 class="font-semibold text-green-600 mb-2"><i class="fas fa-home mr-2"></i>共同的家</h3>
+                        <p class="text-gray-600 text-sm">想要和你有一个温馨的小家，养一只小猫或小狗</p>
+                    </div>
+                    <div class="plan-item">
+                        <h3 class="font-semibold text-green-600 mb-2"><i class="fas fa-ring mr-2"></i>重要承诺</h3>
+                        <p class="text-gray-600 text-sm">希望能在某个浪漫的日子给你一个正式的承诺</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 相册部分 -->
+        <section id="albums" class="mb-12">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-semibold text-blue-600 flex items-center">
+                    <i class="fas fa-images mr-2"></i>
+                    <span>📸 相册预览</span>
+                </h2>
+                <div class="flex gap-2">
+                    <button id="show-all-albums" class="filter-btn active">全部</button>
+                    <button id="show-latest-albums" class="filter-btn">最新</button>
+                </div>
+            </div>
+            
+            <div class="date-filter">
+                <label>查看指定日期:</label>
+                <input type="date" id="album-date-filter">
+                <button id="apply-album-date-filter">应用</button>
+                <button id="clear-album-date-filter">清除</button>
+            </div>
+            
+            <div id="albums-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 相册内容将通过JavaScript动态加载 -->
+                <p class="text-gray-500 text-center py-4 col-span-2">加载中...</p>
+            </div>
+        </section>
+
+        <!-- 统计部分 -->
+        <section id="stats">
+            <h2 class="text-2xl font-semibold mb-4 text-green-600 flex items-center">
+                <i class="fas fa-chart-simple mr-2"></i>
+                <span>✨ 我们的故事</span>
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="stats-card p-4 rounded-lg shadow-md text-center">
+                    <div class="text-2xl font-bold text-pink-500" id="days-together">计算中...</div>
+                    <div class="text-sm text-gray-600">在一起</div>
+                </div>
+                <div class="stats-card p-4 rounded-lg shadow-md text-center">
+                    <div class="text-2xl font-bold text-pink-500" id="diary-count">0篇</div>
+                    <div class="text-sm text-gray-600">日记</div>
+                </div>
+                <div class="stats-card p-4 rounded-lg shadow-md text-center">
+                    <div class="text-2xl font-bold text-pink-500" id="album-count">0张</div>
+                    <div class="text-sm text-gray-600">照片</div>
+                </div>
+                <div class="stats-card p-4 rounded-lg shadow-md text-center">
+                    <div class="text-2xl font-bold text-pink-500" id="message-count">0条</div>
+                    <div class="text-sm text-gray-600">留言</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 留言板部分 -->
+        <section id="messages" class="mb-12">
+            <h2 class="text-2xl font-semibold mb-4 text-yellow-600 flex items-center">
+                <i class="fas fa-comments mr-2"></i>
+                <span>💌 爱的留言</span>
+            </h2>
+            <div id="messages-container" class="message-board">
+                <!-- 留言内容将通过JavaScript动态加载 -->
+                <p class="text-gray-500 text-center py-4">加载中...</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-white mt-12 py-6" style="background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px);">
+        <div class="max-w-4xl mx-auto px-4 text-center text-gray-600">
+            <p>© 2025 多多恋爱日记 - 记录我们的点点滴滴 💕</p>
+        </div>
+    </footer>
+
+    <script>
+        // 默认数据
+        const DEFAULT_DATA = {
+            startDate: '2025-01-01',
+            anniversaryDate: '2026-01-01',
+            valentineDate: '2026-02-14',
+            birthdayDate: '2026-04-25'
+        };
+        
+        // 数据存储
+        let diaryData = [];
+        let memoryData = [];
+        let albumData = [];
+        let messageData = [];
+        
+        // 当前过滤状态
+        let diaryFilter = 'latest'; // 'all' or 'latest'
+        let albumFilter = 'latest'; // 'all' or 'latest'
+        let diaryDateFilter = null;
+        let albumDateFilter = null;
+        
+        // 从JSON文件加载数据
+        async function loadData() {
+            try {
+                // 加载日记数据 
+                const diaryResponse = await fetch('data/diaries.json');
+                if (diaryResponse.ok) {
+                    diaryData = await diaryResponse.json();
+                } else {
+                    console.warn('无法加载日记数据');
+                    diaryData = [];
+                }
+                
+                // 加载纪念日数据
+                const memoryResponse = await fetch('./data/memories.json');
+                if (memoryResponse.ok) {
+                    memoryData = await memoryResponse.json();
+                } else {
+                    console.warn('无法加载纪念日数据');
+                    memoryData = [];
+                }
+                
+                // 加载相册数据
+                const albumResponse = await fetch('./data/albums.json');
+                if (albumResponse.ok) {
+                    albumData = await albumResponse.json();
+                } else {
+                    console.warn('无法加载相册数据');
+                    albumData = [];
+                }
+                
+                // 加载留言数据
+                const messageResponse = await fetch('./data/messages.json');
+                if (messageResponse.ok) {
+                    messageData = await messageResponse.json();
+                } else {
+                    console.warn('无法加载留言数据');
+                    messageData = [];
+                }
+            } catch (error) {
+                console.error('加载数据时出错:', error);
+            }
+        }
+        
+        // 更新统计数据
+        function updateStats() {
+            // 计算在一起天数
+            const startDate = new Date(DEFAULT_DATA.startDate);
+            const today = new Date();
+            const daysTogether = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+            document.getElementById('days-together').textContent = daysTogether + '天';
+            
+            // 更新计数
+            document.getElementById('diary-count').textContent = diaryData.length + '篇';
+            document.getElementById('album-count').textContent = albumData.length + '张';
+            document.getElementById('message-count').textContent = messageData.length + '条';
+        }
+        
+        // 更新倒计时
+        function updateCountdowns() {
+            const today = new Date();
+            
+            // 下一个纪念日倒计时
+            if (DEFAULT_DATA.anniversaryDate) {
+                const anniversaryDate = new Date(DEFAULT_DATA.anniversaryDate);
+                const diffAnniversary = Math.ceil((anniversaryDate - today) / (1000 * 60 * 60 * 24));
+                document.getElementById('anniversary-countdown').textContent = diffAnniversary > 0 ? diffAnniversary + '天' : '已到达';
+                document.getElementById('anniversary-date-display').textContent = DEFAULT_DATA.anniversaryDate;
+            }
+            
+            // 情人节倒计时
+            if (DEFAULT_DATA.valentineDate) {
+                const valentineDate = new Date(DEFAULT_DATA.valentineDate);
+                const diffValentine = Math.ceil((valentineDate - today) / (1000 * 60 * 60 * 24));
+                document.getElementById('valentine-countdown').textContent = diffValentine > 0 ? diffValentine + '天' : '已到达';
+                document.getElementById('valentine-date-display').textContent = DEFAULT_DATA.valentineDate;
+            }
+            
+            // 生日倒计时
+            if (DEFAULT_DATA.birthdayDate) {
+                const birthdayDate = new Date(DEFAULT_DATA.birthdayDate);
+                const diffBirthday = Math.ceil((birthdayDate - today) / (1000 * 60 * 60 * 24));
+                document.getElementById('birthday-countdown').textContent = diffBirthday > 0 ? diffBirthday + '天' : '已到达';
+                document.getElementById('birthday-date-display').textContent = DEFAULT_DATA.birthdayDate;
+            }
+        }
+        
+        // 渲染日记
+        function renderDiaries() {
+            const container = document.getElementById('diary-container');
+            container.innerHTML = '';
+            
+            let filteredDiaries = [...diaryData];
+            
+            // 应用日期过滤器
+            if (diaryDateFilter) {
+                filteredDiaries = filteredDiaries.filter(diary => diary.date === diaryDateFilter);
+            } else if (diaryFilter === 'latest') {
+                // 只显示最新的5篇日记
+                filteredDiaries.sort((a, b) => new Date(b.date) - new Date(a.date));
+                filteredDiaries = filteredDiaries.slice(0, 5);
+            }
+            
+            if (filteredDiaries.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-4">暂无日记，快去添加第一篇吧！</p>';
+                return;
+            }
+            
+            // 按日期倒序排列
+            filteredDiaries.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            filteredDiaries.forEach((diary, index) => {
+                const diaryElement = document.createElement('div');
+                diaryElement.className = 'diary-card romantic-card bg-white p-6 rounded-lg shadow-md hover:shadow-lg mb-6';
+                diaryElement.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-semibold">${diary.title}</h3>
+                        <div>
+                            <span class="text-sm text-gray-500 mr-2">${diary.date}</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-4">${diary.content}</p>
+                    <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                        ${(diary.tags || []).map(tag => `<span class="bg-pink-100 px-2 py-1 rounded">${tag}</span>`).join('')}
+                    </div>
+                `;
+                container.appendChild(diaryElement);
+            });
+        }
+        
+        // 渲染纪念日
+        function renderMemories() {
+            const container = document.getElementById('memories-container');
+            container.innerHTML = '';
+            
+            if (memoryData.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-4">暂无纪念日记录</p>';
+                return;
+            }
+            
+            // 按日期倒序排列
+            const sortedMemories = [...memoryData].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            sortedMemories.forEach((memory, index) => {
+                const memoryElement = document.createElement('div');
+                memoryElement.className = 'memory-item';
+                memoryElement.innerHTML = `
+                    <div class="flex justify-between">
+                        <h3 class="text-lg font-semibold text-purple-600">${memory.title}</h3>
+                    </div>
+                    <p class="text-gray-600 mt-1">${memory.description}</p>
+                    <span class="text-sm text-gray-500 block mt-2">${memory.date}</span>
+                `;
+                container.appendChild(memoryElement);
+            });
+        }
+        
+        // 渲染相册
+        function renderAlbums() {
+            const container = document.getElementById('albums-container');
+            container.innerHTML = '';
+            
+            let filteredAlbums = [...albumData];
+            
+            // 应用日期过滤器
+            if (albumDateFilter) {
+                filteredAlbums = filteredAlbums.filter(album => album.date === albumDateFilter);
+            } else if (albumFilter === 'latest') {
+                // 只显示最新的4张照片
+                filteredAlbums.sort((a, b) => new Date(b.date) - new Date(a.date));
+                filteredAlbums = filteredAlbums.slice(0, 4);
+            }
+            
+            if (filteredAlbums.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-4 col-span-2">暂无相册内容，快去添加第一张照片吧！</p>';
+                return;
+            }
+            
+            // 按日期倒序排列
+            filteredAlbums.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            filteredAlbums.forEach((album, index) => {
+                const albumElement = document.createElement('div');
+                albumElement.className = 'bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow romantic-card';
+                
+                // 检查是否有图片路径
+                if (album.image) {
+                    albumElement.innerHTML = `
+                        <img src="${album.image}" alt="${album.title}" class="photo-image" onerror="this.parentElement.innerHTML = '<div class=\\'h-48 photo-placeholder\\'>${album.category || album.title}</div>';">
+                        <div class="p-4">
+                            <div class="flex justify-between">
+                                <h3 class="text-lg font-semibold">${album.title}</h3>
+                            </div>
+                            <p class="text-sm text-gray-600 mt-1">${album.description}</p>
+                            <span class="text-sm text-gray-500 block mt-2">${album.date}</span>
+                        </div>
+                    `;
+                } else {
+                    albumElement.innerHTML = `
+                        <div class="h-48 photo-placeholder">${album.category || album.title}</div>
+                        <div class="p-4">
+                            <div class="flex justify-between">
+                                <h3 class="text-lg font-semibold">${album.title}</h3>
+                            </div>
+                            <p class="text-sm text-gray-600 mt-1">${album.description}</p>
+                            <span class="text-sm text-gray-500 block mt-2">${album.date}</span>
+                        </div>
+                    `;
+                }
+                
+                container.appendChild(albumElement);
+            });
+        }
+        
+        // 渲染留言
+        function renderMessages() {
+            const container = document.getElementById('messages-container');
+            container.innerHTML = '';
+            
+            if (messageData.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-4">暂无留言，快去添加第一条留言吧！</p>';
+                return;
+            }
+            
+            // 按时间倒序排列
+            const sortedMessages = [...messageData].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            sortedMessages.forEach((message, index) => {
+                const messageElement = document.createElement('div');
+                messageElement.className = 'message-item';
+                messageElement.innerHTML = `
+                    <div class="flex justify-between">
+                        <p class="text-gray-700">${message.content}</p>
+                    </div>
+                    <p class="text-right text-sm text-gray-500 mt-2">- ${message.author}</p>
+                    <p class="text-right text-xs text-gray-400 mt-1">${message.date}</p>
+                `;
+                container.appendChild(messageElement);
+            });
+        }
+        
+        // 实时恋爱计时器
+        function updateLoveTimer() {
+            const startDate = new Date(DEFAULT_DATA.startDate);
+            const now = new Date();
+            const diff = now - startDate;
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('love-timer').textContent = 
+                days + "天" + hours + "小时" + minutes + "分钟" + seconds + "秒";
+        }
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // 创建飘雪效果
+        function createSnowflakes() {
+            const container = document.getElementById('snow-container');
+            // 清空现有雪花
+            container.innerHTML = '';
+            
+            const snowflakeCount = 50;
+            
+            for (let i = 0; i < snowflakeCount; i++) {
+                setTimeout(() => {
+                    const snowflake = document.createElement('div');
+                    snowflake.innerHTML = '❄';
+                    snowflake.classList.add('snowflake');
+                    
+                    // 随机位置和样式
+                    const startLeft = Math.random() * 100;
+                    const animationDuration = 5 + Math.random() * 10;
+                    const animationDelay = Math.random() * 5;
+                    const opacity = 0.5 + Math.random() * 0.5;
+                    
+                    snowflake.style.left = `${startLeft}vw`;
+                    snowflake.style.animationDuration = `${animationDuration}s`;
+                    snowflake.style.animationDelay = `${animationDelay}s`;
+                    snowflake.style.opacity = opacity;
+                    
+                    container.appendChild(snowflake);
+                    
+                    // 动画结束后移除元素
+                    setTimeout(() => {
+                        if (snowflake.parentNode) {
+                            snowflake.remove();
+                        }
+                    }, animationDuration * 1000);
+                }, i * 300);
+            }
+        }
+        
+        // 创建爱心效果
+        function createHearts() {
+            const container = document.getElementById('heart-container');
+            // 清空现有爱心
+            container.innerHTML = '';
+            
+            const heartCount = 20;
+            
+            for (let i = 0; i < heartCount; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart');
+                    
+                    // 随机位置和样式
+                    const startLeft = Math.random() * 100;
+                    const animationDuration = 6 + Math.random() * 8;
+                    const animationDelay = Math.random() * 5;
+                    const size = 5 + Math.random() * 15;
+                    
+                    heart.style.left = `${startLeft}vw`;
+                    heart.style.animationDuration = `${animationDuration}s`;
+                    heart.style.animationDelay = `${animationDelay}s`;
+                    heart.style.width = `${size}px`;
+                    heart.style.height = `${size}px`;
+                    
+                    heart.addEventListener('animationend', () => {
+                        if (heart.parentNode) {
+                            heart.remove();
+                        }
+                    });
+                    
+                    document.body.appendChild(heart);
+                }, i * 600);
+            }
+        }
+        
+        // 管理面板切换
+        document.getElementById('admin-toggle').addEventListener('click', function() {
+            const panel = document.getElementById('admin-panel');
+            if (panel.style.display === 'block') {
+                panel.style.display = 'none';
+            } else {
+                panel.style.display = 'block';
+            }
+        });
+        
+        // 标签页切换
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                // 移除所有活动状态
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // 添加当前活动状态
+                this.classList.add('active');
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // 日记过滤按钮
+        document.getElementById('show-all-diaries').addEventListener('click', function() {
+            diaryFilter = 'all';
+            document.getElementById('show-all-diaries').classList.add('active');
+            document.getElementById('show-latest-diaries').classList.remove('active');
+            renderDiaries();
+        });
+        
+        document.getElementById('show-latest-diaries').addEventListener('click', function() {
+            diaryFilter = 'latest';
+            document.getElementById('show-latest-diaries').classList.add('active');
+            document.getElementById('show-all-diaries').classList.remove('active');
+            renderDiaries();
+        });
+        
+        // 相册过滤按钮
+        document.getElementById('show-all-albums').addEventListener('click', function() {
+            albumFilter = 'all';
+            document.getElementById('show-all-albums').classList.add('active');
+            document.getElementById('show-latest-albums').classList.remove('active');
+            renderAlbums();
+        });
+        
+        document.getElementById('show-latest-albums').addEventListener('click', function() {
+            albumFilter = 'latest';
+            document.getElementById('show-latest-albums').classList.add('active');
+            document.getElementById('show-all-albums').classList.remove('active');
+            renderAlbums();
+        });
+        
+        // 日记日期过滤
+        document.getElementById('apply-diary-date-filter').addEventListener('click', function() {
+            const dateValue = document.getElementById('diary-date-filter').value;
+            if (dateValue) {
+                diaryDateFilter = dateValue;
+                renderDiaries();
+            }
+        });
+        
+        document.getElementById('clear-diary-date-filter').addEventListener('click', function() {
+            document.getElementById('diary-date-filter').value = '';
+            diaryDateFilter = null;
+            renderDiaries();
+        });
+        
+        // 相册日期过滤
+        document.getElementById('apply-album-date-filter').addEventListener('click', function() {
+            const dateValue = document.getElementById('album-date-filter').value;
+            if (dateValue) {
+                albumDateFilter = dateValue;
+                renderAlbums();
+            }
+        });
+        
+        document.getElementById('clear-album-date-filter').addEventListener('click', function() {
+            document.getElementById('album-date-filter').value = '';
+            albumDateFilter = null;
+            renderAlbums();
+        });
+        
+        // 刷新数据按钮事件
+        document.getElementById('refresh-data').addEventListener('click', async function() {
+            await loadData();
+            renderDiaries();
+            renderMemories();
+            renderAlbums();
+            renderMessages();
+            updateStats();
+            alert('所有数据已刷新！');
+        });
+        
+        document.getElementById('refresh-diaries').addEventListener('click', async function() {
+            await loadData();
+            renderDiaries();
+            updateStats();
+            alert('日记数据已刷新！');
+        });
+        
+        document.getElementById('refresh-memories').addEventListener('click', async function() {
+            await loadData();
+            renderMemories();
+            updateStats();
+            alert('纪念日数据已刷新！');
+        });
+        
+        document.getElementById('refresh-albums').addEventListener('click', async function() {
+            await loadData();
+            renderAlbums();
+            updateStats();
+            alert('相册数据已刷新！');
+        });
+        
+        document.getElementById('refresh-messages').addEventListener('click', async function() {
+            await loadData();
+            renderMessages();
+            updateStats();
+            alert('留言数据已刷新！');
+        });
+        
+        // 初始化应用
+        async function initApp() {
+            // 加载数据
+            await loadData();
+            
+            // 首次渲染所有内容
+            renderDiaries();
+            renderMemories();
+            renderAlbums();
+            renderMessages();
+            updateLoveTimer();
+            updateCountdowns();
+            updateStats();
+            
+            // 启动定时器
+            setInterval(updateLoveTimer, 1000);
+            setInterval(updateCountdowns, 60000); // 每分钟更新一次倒计时
+            
+            // 启动动画效果
+            createSnowflakes();
+            createHearts();
+            setInterval(createSnowflakes, 10000);
+            setInterval(createHearts, 12000);
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
